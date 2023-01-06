@@ -1,0 +1,63 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+    # Publish semver tags as releases.
+    tags: ["v*.*.*"]
+    paths-ignore:
+      - "README.md"
+      - ".vscode/**"
+      - "assets/**"
+      - "build-and-run.md"
+  workflow_dispatch:
+
+jobs: 
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repo
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@main
+
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+        - name: 'Build image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+        
+        - name: 'Push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            az containerapp create 
+              --name $API_NAME 
+              --resource-group $RESOURCE_GROUP 
+              --environment $ENVIRONMENT 
+              --image $ACR_NAME.azurecr.io/$API_NAME 
+              --target-port 3500 
+              --ingress 'external' 
+              --registry-server $ACR_NAME.azurecr.io 
+              --query properties.configuration.ingress.fqdn
+
+              # az containerapp create \
+              #   --name my-container-app \
+              #   --resource-group $RESOURCE_GROUP \
+              #   --environment $CONTAINERAPPS_ENVIRONMENT \
+              #   --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest \
+              #   --target-port 80 \
+              #   --ingress 'external' \
+              #   --query properties.configuration.ingress.fqdn
