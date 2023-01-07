@@ -37,7 +37,7 @@ jobs:
           registry: ${{ env.container_registry }}
           username: ${{ env.client_id }} 
           password: ${{ env.client_secret }} 
-
+      #Deploy 1
       - name: Build & Push
         uses: docker/build-push-action@v2
         with:
@@ -45,3 +45,7 @@ jobs:
           build-args: |
             version=${{ steps.tag.outputs.tag }}
           tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
+      #Deploy 2
+      - name: Build the Docker image
+        uses: actions/checkout@v3
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
