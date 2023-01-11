@@ -28,12 +28,19 @@ jobs:
     needs: []
     if: always()
     steps:
+    # - uses: actions/checkout@v2
+    # - name: Azure Login
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    #     enable-AzPSSession: true
+
+    
     - uses: actions/checkout@v2
-    - name: Azure Login
-      uses: azure/login@v1
+    - name: Azure Login  
+    - uses: Azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true
+        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
     # - name: Replace tokens
     #   uses: cschleiden/replace-tokens@v1.0
