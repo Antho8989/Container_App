@@ -3,7 +3,7 @@ on:
   workflow_dispatch
 
 env:
-  infraDirectory:       'container_app_main' 
+  infraDirectory:       'add_con_apps' 
   terraformVersion:     '0.14.11'
   resourceGroup:        'test' 
   storageAccountName:   'test' 
@@ -31,17 +31,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Azure Login
       run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
-      # uses: azure/login@v1
-      # with:
-      #   creds: ${{ secrets.AZURE_CREDENTIALS }}
-      #   enable-AzPSSession: true
-
-    
-    # - uses: actions/checkout@v2
-    # - name: Azure Login  
-    # - uses: Azure/login@v1
-    #   with:
-    #     creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
     - name: Replace tokens
       uses: cschleiden/replace-tokens@v1.0
