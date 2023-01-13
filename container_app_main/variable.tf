@@ -18,7 +18,7 @@ variable "environment" {
 ########Credentials
 variable "SUBSCRIPTION_ID" {
   description = "Environment tag value"
-  default     = "0dbb99fb-abdc-4782-905b-ace3f6e255c1",
+  default     = "0dbb99fb-abdc-4782-905b-ace3f6e255c1"
 }
 variable "SP_CLIENT_ID" {
   description = "Environment tag value"
