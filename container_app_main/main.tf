@@ -21,14 +21,14 @@ terraform {
 
 provider "azurerm" {
   features {}
-  #   subscription_id = "!__subscription_id__!"
-  #   client_id       = "!__client_id__!"
-  #   client_secret   = "!__client_secret__!"
-  #   tenant_id       = "!__tenant_id__!"
+    subscription_id = "!__subscription_id__!"
+    client_id       = "!__client_id__!"
+    client_secret   = "!__client_secret__!"
+    tenant_id       = "!__tenant_id__!"
 }
 
 provider "azuread" {
-  #   tenant_id = "!__tenant_id__!"
+    tenant_id = "!__tenant_id__!"
 }
 
 ######################################

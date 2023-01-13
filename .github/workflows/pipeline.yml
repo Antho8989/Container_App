@@ -43,23 +43,18 @@ jobs:
     #   with:
     #     creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
-    # - name: Replace tokens
-    #   uses: cschleiden/replace-tokens@v1.0
-    #   with:
-    #     tokenPrefix: '!__'
-    #     tokenSuffix: '__!'
+    - name: Replace tokens
+      uses: cschleiden/replace-tokens@v1.0
+      with:
+        tokenPrefix: '!__'
+        tokenSuffix: '__!'
     #     files: '["**/*.tf", "**/*.tfvars"]'
-    #   env: 
-    #     resourceGroup: ${{ env.resourceGroup }}
-    #     storageAccountName: ${{ env.storageAccountName }}
-    #     storageContainerName: ${{ env.storageContainerName }}
-    #     storageKey: ${{ env.storageKey }}
-    #     subscription_id: ${{ env.subscription_id }}
-    #     client_id: ${{ env.client_id }}
-    #     client_secret: ${{ env.client_secret }}
-    #     tenant_id: ${{ env.tenant_id }}
-    #     AGENT_VM_PW: ${{ env.AGENT_VM_PW }}
-    #     ADMIN_OBJECT_ID: ${{ env.ADMIN_OBJECT_ID }}
+      env: 
+        resourceGroup: ${{ env.resourceGroup }}
+        subscription_id: ${{ env.subscription_id }}
+        client_id: ${{ env.client_id }}
+        client_secret: ${{ env.client_secret }}
+        tenant_id: ${{ env.tenant_id }}
 
         
     - name: terraform version installer
