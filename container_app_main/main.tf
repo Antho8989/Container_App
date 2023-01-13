@@ -19,22 +19,23 @@ terraform {
   # required_version = ">= 0.14.11"
 }
 
-# provider "azurerm" {
-#   features {}
-#     subscription_id = "!__subscription_id__!"
-#     client_id       = "!__client_id__!"
-#     client_secret   = "!__client_secret__!"
-#     tenant_id       = "!__tenant_id__!"
-# }
-
 provider "azurerm" {
-  subscription_id = var.SUBSCRIPTION_ID
-  client_id       = var.SP_CLIENT_ID
-  client_secret   = var.SP_CLIENT_SECRET
-  tenant_id       = var.SP_TENANT_ID
-  version         = ">= 0.14.11"#Can be overide as you wish
   features {}
+    subscription_id = "!__subscription_id__!"
+    client_id       = "!__client_id__!"
+    client_secret   = "!__client_secret__!"
+    tenant_id       = "!__tenant_id__!"
+    version         = ">= 0.14.11"
 }
+
+# provider "azurerm" {
+#   subscription_id = var.SUBSCRIPTION_ID
+#   client_id       = var.SP_CLIENT_ID
+#   client_secret   = var.SP_CLIENT_SECRET
+#   tenant_id       = var.SP_TENANT_ID
+#   version         = ">= 0.14.11"#Can be overide as you wish
+#   features {}
+# }
 
 provider "azuread" {
     tenant_id = "!__tenant_id__!"
