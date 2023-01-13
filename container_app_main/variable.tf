@@ -26,7 +26,7 @@ variable "SP_CLIENT_ID" {
 }
 variable "SP_CLIENT_SECRET" {
   description = "Environment tag value"
-  default     = "rdv8Q~v5mckQr4Fdv0bcpQnuzKGXSPCwV_1cwaD3",
+  default     = "rdv8Q~v5mckQr4Fdv0bcpQnuzKGXSPCwV_1cwaD3"
 }
 variable "SP_TENANT_ID" {
   description = "Environment tag value"
