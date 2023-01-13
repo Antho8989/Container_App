@@ -30,10 +30,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true
+      run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+      # uses: azure/login@v1
+      # with:
+      #   creds: ${{ secrets.AZURE_CREDENTIALS }}
+      #   enable-AzPSSession: true
 
     
     # - uses: actions/checkout@v2
