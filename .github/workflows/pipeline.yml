@@ -48,7 +48,7 @@ jobs:
       with:
         tokenPrefix: '!__'
         tokenSuffix: '__!'
-        files: '["main.tf"]'
+        files: '["**/main.tf"]'
     #     files: '["**/*.tf", "**/*.tfvars"]'
       env: 
         resourceGroup: ${{ env.resourceGroup }}
