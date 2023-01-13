@@ -45,7 +45,6 @@ jobs:
 
     - name: Replace tokens
       uses: cschleiden/replace-tokens@v1.0
-      working-directory: "${{ env.infraDirectory }}"
       with:
         tokenPrefix: '!__'
         tokenSuffix: '__!'
