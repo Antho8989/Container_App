@@ -4,6 +4,7 @@ on:
 
 env:
   infraDirectory:       'add_con_apps' 
+  # infraDirectory:       'container_app_main' 
   terraformVersion:     '0.14.11'
   resourceGroup:        'test' 
   storageAccountName:   'test' 
