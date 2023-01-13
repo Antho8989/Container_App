@@ -75,6 +75,6 @@ jobs:
       working-directory: "${{ env.infraDirectory }}"
       run: terraform plan     
 
-    # - name: terraform apply
-    #   working-directory: "${{ env.infraDirectory }}"
-    #   run: terraform apply -auto-approve ${{ env.variableFile }} 
+    - name: terraform apply
+      working-directory: "${{ env.infraDirectory }}"
+      run: terraform apply -auto-approve #${{ env.variableFile }} 
