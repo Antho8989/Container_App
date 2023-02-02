@@ -9,11 +9,11 @@ variable "customer_prefix" {
 }
 variable "location" {
   description = "Azure Region location for deployment of resources"
-  default     = "!__tenant_id__!"
+  default     = "!__location__!"
 }
 variable "environment" {
   description = "Environment tag value"
-  default     = "!__tenant_id__!"
+  default     = "!__environment__!"
 }
 
 ######################

@@ -6,9 +6,10 @@ env:
   infraDirectory:       'container_app_main' 
   terraformVersion:     '0.14.11'
   resourceGroup:        'test' 
-  customer_prefix:      'test' 
+  customer_name:        'test customer'
+  customer_prefix:      'testcust' 
   location:             'east us'
-  environment:          'dev' 
+  environment:          'dev' #Dev/Sandbox/prod
   storageKey:           'AddCustName.tfstate' #Change the terraform .tfstate name to reflect the applicable Customer
   variableFile:         '--var-file="./AddCustName.tfvars"' #Change the terraform file location to reflect the applicable Customer
   outputfile:           '-out=test.tfstate'
