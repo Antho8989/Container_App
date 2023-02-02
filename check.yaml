@@ -1,0 +1,77 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+    # Publish semver tags as releases.
+    tags: ["v*.*.*"]
+    # paths-ignore:
+    #   - "README.md"
+    #   - ".vscode/**"
+    #   - "assets/**"
+    #   - "build-and-run.md"
+  workflow_dispatch:
+
+env:  
+  subscription_id:        ${{ secrets.subscription_id }}
+  client_id:              ${{ secrets.client_id }}
+  client_secret:          ${{ secrets.client_secret }}
+  tenant_id:              ${{ secrets.tenant_id }}
+  REGISTRY_LOGIN_SERVER:  ${{ secrets.container_registry }}  #Example: myregistry.azurecr.io
+  API_NAME:               "VMtoContainer" #Image Name
+  REGISTRY_USERNAME:      ${{ secrets.REGISTRY_USERNAME }} #Container Registry Username
+  REGISTRY_PASSWORD:      ${{ secrets.REGISTRY_PASSWORD }} #Container Registry Password
+  RESOURCE_GROUP:         'test-rg-dev' # RG
+  ENVIRONMENT:            'test-env-dev' #Container app environment
+  ACR_NAME:               'testcr234'
+  image:                  "mcr.microsoft.com/azuredocs/containerapps-helloworld"
+  regserver:              'mcr.microsoft.com'
+  BuildNumber:            ${{github.run_number}}
+  
+jobs: 
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Azure Login
+        run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+
+      - name: Replace tokens
+        uses: cschleiden/replace-tokens@v1.0
+        with:
+          tokenPrefix: '{'
+          tokenSuffix: '}'
+          files: '["**/containerapp.yaml"]'
+        env: 
+          BuildNumber: ${{github.run_number}}
+
+      - name: change Build Number
+        run: |
+         bash -c "sed -i 's/BuildNumber/${{github.run_number}}/g'  containerapp.yaml"
+
+      - name: 'Publish Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: containerapp.yaml
+
+      - name: 'Build image'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/vmtocontainer:${{github.run_number}}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/vmtocontainer:${{github.run_number}}
+
+      - name: 'Push image'
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+      - run: |
+          az containerapp create -n VMtoContainer   -g test-rg-dev  --environment test-env-dev \
+            --yaml "containerapp.yaml"

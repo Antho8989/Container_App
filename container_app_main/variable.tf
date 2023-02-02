@@ -1,19 +1,19 @@
 #General Variables 
 variable "full_customer_name" {
   description = "Name of the customer or client"
-  default     = "test"
+  default     = "!__customer_name__!"
 }
 variable "customer_prefix" {
   description = "Prefix name for the customer or client"
-  default     = "test"
+  default     = "!__customer_prefix__!"
 }
 variable "location" {
   description = "Azure Region location for deployment of resources"
-  default     = "east us"
+  default     = "!__tenant_id__!"
 }
 variable "environment" {
   description = "Environment tag value"
-  default     = "dev"
+  default     = "!__tenant_id__!"
 }
 
 ######################

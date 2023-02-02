@@ -2,13 +2,13 @@ name: Azure Infrastructure Deployment
 on: 
   workflow_dispatch
 
-env:
-  infraDirectory:       'add_con_apps' 
-  # infraDirectory:       'container_app_main' 
+env: 
+  infraDirectory:       'container_app_main' 
   terraformVersion:     '0.14.11'
   resourceGroup:        'test' 
-  storageAccountName:   'test' 
-  storageContainerName: 'test' 
+  customer_prefix:      'test' 
+  location:             'east us'
+  environment:          'dev' 
   storageKey:           'AddCustName.tfstate' #Change the terraform .tfstate name to reflect the applicable Customer
   variableFile:         '--var-file="./AddCustName.tfvars"' #Change the terraform file location to reflect the applicable Customer
   outputfile:           '-out=test.tfstate'
@@ -17,12 +17,7 @@ env:
   client_id:            ${{ secrets.client_id }}
   client_secret:        ${{ secrets.client_secret }}
   tenant_id:            ${{ secrets.tenant_id }}
-  AGENT_VM_PW:          ${{ secrets.AGENT_VM_PW }}
-  ADMIN_OBJECT_ID:      ${{ secrets.ADMIN_OBJECT_ID }}
 
-
-
-  
 jobs:
   Terraform_Plan:
     runs-on: 'ubuntu-latest' 
@@ -33,7 +28,7 @@ jobs:
     - name: Azure Login
       run: az login --service-principal -u ${{ secrets.CLIENT_ID }} -p ${{ secrets.CLIENT_SECRET }} --tenant ${{ secrets.TENANT_ID }}
 
-    - name: Replace tokens
+    - name: Replace tokens for main.tf
       uses: cschleiden/replace-tokens@v1.0
       with:
         tokenPrefix: '!__'
@@ -46,6 +41,19 @@ jobs:
         client_id: ${{ env.client_id }}
         client_secret: ${{ env.client_secret }}
         tenant_id: ${{ env.tenant_id }}
+
+    - name: Replace tokens for variable.tf
+      uses: cschleiden/replace-tokens@v1.0
+      with:
+        tokenPrefix: '!__'
+        tokenSuffix: '__!'
+        files: '["**/variable.tf"]'
+      env: 
+        customer_name: ${{ env.customer_name }}
+        customer_prefix: ${{ env.customer_prefix }}
+        location: ${{ env.location }}
+        environment: ${{ env.environment }}
+
 
         
     - name: terraform version installer
@@ -65,6 +73,6 @@ jobs:
       working-directory: "${{ env.infraDirectory }}"
       run: terraform plan     
 
-    - name: terraform apply
-      working-directory: "${{ env.infraDirectory }}"
-      run: terraform apply -auto-approve #${{ env.variableFile }} 
+    # - name: terraform apply
+    #   working-directory: "${{ env.infraDirectory }}"
+    #   run: terraform apply -auto-approve 
