@@ -10,7 +10,6 @@ env:
   customer_prefix:      'testcust' 
   location:             'east us'
   environment:          'dev' #Dev/Sandbox/prod
-  storageKey:           'AddCustName.tfstate' #Change the terraform .tfstate name to reflect the applicable Customer
   variableFile:         '--var-file="./AddCustName.tfvars"' #Change the terraform file location to reflect the applicable Customer
   outputfile:           '-out=test.tfstate'
   
